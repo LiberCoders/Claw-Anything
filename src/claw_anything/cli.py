@@ -997,13 +997,6 @@ def cmd_grade(args: argparse.Namespace) -> None:
     print(f"task_score:     {task_score:.2f}")
     print(f"passed:         {passed}")
 
-def _strip_grading_results(trace_path: Path) -> None:
-    """Drop any existing grading_result lines so a re-grade replaces, not stacks."""
-    lines = [l for l in trace_path.read_text().splitlines()
-             if l.strip() and '"grading_result"' not in l]
-    trace_path.write_text("\n".join(lines) + "\n")
-
-
     # Persist the fresh grading_result back into the trace so `grade` can re-score an
     # existing trace in place (e.g. adding an LLM judge to a --no-judge run) without
     # re-running the agent. Without this, grade only printed and the file was untouched.
@@ -1013,6 +1006,14 @@ def _strip_grading_results(trace_path: Path) -> None:
             Path(args.trace), getattr(start, "trace_id", ""), task.task_id,
             scores, task_score, passed)
         print(f"[write] grading_result updated in {args.trace}")
+
+
+def _strip_grading_results(trace_path: Path) -> None:
+    """Drop any existing grading_result lines so a re-grade replaces, not stacks."""
+    lines = [l for l in trace_path.read_text().splitlines()
+             if l.strip() and '"grading_result"' not in l]
+    trace_path.write_text("\n".join(lines) + "\n")
+
 
 
 def _append_grading_to_trace(
