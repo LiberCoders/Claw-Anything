@@ -190,7 +190,7 @@ Scoring criteria:
         service_checks = [
             bool(called & {"loop_habit_gui_list_habits", "loop_habit_gui_get_habit"}),
             bool(called & {"finance_list_transactions", "finance_get_transaction"}),
-            bool(called & {"my_expenses_gui_list_accounts", "my_expenses_gui_get_account", "my_expenses_gui_create_transaction"}),
+            bool(called & {"my_expenses_list_accounts", "my_expenses_get_account", "my_expenses_add_transaction"}),
             bool(called & {"claw_obsidian_list_notes", "claw_obsidian_get_note", "claw_obsidian_search"}),
         ]
         breadth = sum(service_checks) / len(service_checks) if service_checks else 0
@@ -199,7 +199,7 @@ Scoring criteria:
         detail_tools = {
             "loop_habit_gui_get_habit",
             "finance_get_transaction",
-            "my_expenses_gui_get_account",
+            "my_expenses_get_account",
             "claw_obsidian_get_note",
         }
         detail_count = len([d for d in dispatches if d.tool_name in detail_tools])
@@ -244,7 +244,7 @@ Scoring criteria:
 
         # Check if account balance was verified (any account check is sufficient)
         balance_checked = any(
-            d.tool_name in {"my_expenses_gui_list_accounts", "my_expenses_gui_get_account"}
+            d.tool_name in {"my_expenses_list_accounts", "my_expenses_get_account"}
             for d in dispatches
         )
         if balance_checked:
