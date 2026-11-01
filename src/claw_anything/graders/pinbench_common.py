@@ -30,6 +30,7 @@ class PinbenchAdaptedGrader(AbstractGrader):
         task: TaskDefinition,
         audit_data: dict[str, dict] | None = None,
         judge: Any | None = None,
+        media_events: list[Any] | None = None,
     ) -> DimensionScores:
         scores = DimensionScores()
 
@@ -70,6 +71,7 @@ class PinbenchAdaptedGrader(AbstractGrader):
             components.append(min(len(final_text.strip()) / self.MIN_FINAL_LENGTH, 1.0))
 
         if self.REQUIRE_IMAGE_LOAD:
+            # No media-event input exists on the trace models.
             loaded = 0.0
             if media_events:
                 loaded = 1.0 if any(
